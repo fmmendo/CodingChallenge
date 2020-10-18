@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Paymentsense.Coding.Challenge.Api.Services;
 
 namespace Paymentsense.Coding.Challenge.Api
 {
@@ -29,6 +30,10 @@ namespace Paymentsense.Coding.Challenge.Api
                         .AllowAnyHeader();
                 });
             });
+
+            services.AddHttpClient();
+            services.AddSingleton<ICountriesService, CountriesService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
