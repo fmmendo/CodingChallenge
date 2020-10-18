@@ -1,0 +1,37 @@
+<table mat-table [dataSource]="countriesList" multiTemplateDataRows class="mat-elevation-z8">
+    <ng-container matColumnDef="flag">
+        <th mat-header-cell *matHeaderCellDef>Flag</th>
+        <td mat-cell *matCellDef="let country">
+            <img width="50" alt="{{country.name}}'s Flag'" [src]='country.flag'>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let country">{{country.name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let country" [attr.colspan]="columnsToDisplay.length">
+            <div mat-card class="country-detail"
+                [@detailExpand]="country == expandedCountry ? 'expanded' : 'collapsed'">
+                <div class="detail-item">Population: {{country.population}}</div>
+                <div class="detail-item">Time Zones: {{country.timezones.join(", ")}}</div>
+                <div class="detail-item">Currencies: {{country.currencies | currency}}</div>
+                <div class="detail-item">Language: {{country.languages | pluckjoin:"name"}}</div>
+                <div class="detail-item">Capital: {{country.capital}}</div>
+                <div class="detail-item">Bordering countries: {{country.borders.join(", ")}}</div>
+
+            </div>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;" class="country-row"
+        [class.expanded]="expandedCountry === row" (click)="expandedCountry = expandedCountry === row ? null : row">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail'];" class="country-detail-row">
+    </tr>
+</table>
+
+<mat-paginator [length]="countries?.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons>
+</mat-paginator>
