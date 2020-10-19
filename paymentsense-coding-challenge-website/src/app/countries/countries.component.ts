@@ -28,12 +28,9 @@ import {
   ],
 })
 export class CountriesComponent implements AfterViewInit, OnInit {
-  // public countries: Country[];
-  // error: string;
   countriesList = new MatTableDataSource<Country>();
   columnsToDisplay: string[] = ["flag", "name"];
   expandedCountry: Country | null;
-  // isExpandedRow = (i: number, row: Object) => row.hasOwnProperty("detailRow");
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
@@ -42,20 +39,14 @@ export class CountriesComponent implements AfterViewInit, OnInit {
   ) {
     paymentsenseCodingChallengeApiService.getCountries().subscribe(
       (response) => {
-        // this.countries = response;
         this.countriesList = new MatTableDataSource<Country>(response);
         this.countriesList.data = response;
         this.countriesList.paginator = this.paginator;
       },
-      (_) => {
-        // this.countries = null;
-        // this.error = "Unable to fetch countries.";
-      }
+      (_) => {}
     );
   }
-  ngAfterViewInit(): void {
-    // this.countriesList.paginator = this.paginator;
-  }
+  ngAfterViewInit(): void {}
 
   rowClick(row: any) {
     this.expandedCountry = this.expandedCountry === row ? null : row;
