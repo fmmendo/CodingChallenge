@@ -22,7 +22,10 @@ namespace Paymentsense.Coding.Challenge.Api.Controllers
         [HttpGet]
         public async Task<ActionResult> GetCountries()
         {
-            var countries = await service.Get();
+            var countries = await service.GetCountriesAsync();
+
+            if (countries == null || countries.Count == 0)
+                return StatusCode(500);
 
             return Ok(countries);
         }

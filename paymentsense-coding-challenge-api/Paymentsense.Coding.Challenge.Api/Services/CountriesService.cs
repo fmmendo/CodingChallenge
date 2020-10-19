@@ -12,32 +12,36 @@ namespace Paymentsense.Coding.Challenge.Api.Services
 {
     public interface ICountriesService
     {
-        Task<List<Country>> Get();
+        Task<List<Country>> GetCountriesAsync();
     }
 
     public class CountriesService : ICountriesService
     {
-        private readonly HttpClient _http;
+        private readonly IHttpService _http;
 
-        public CountriesService(IHttpClientFactory clientFactory)
+        public CountriesService(IHttpService httpService)
         {
-            _http = clientFactory.CreateClient();
+            _http = httpService;
         }
 
-        public async Task<List<Country>> Get()
+        public async Task<List<Country>> GetCountriesAsync()
         {
-            RestCountriesResponse countriesResponse = new RestCountriesResponse();
+            string response = await _http.GetAsync("https://restcountries.eu/rest/v2/all").ConfigureAwait(false);
 
-            using (HttpResponseMessage response = await _http.GetAsync("https://restcountries.eu/rest/v2/all").ConfigureAwait(false))
+            if (string.IsNullOrEmpty(response))
+                return null;
+
+            List<Country> countries;
+            try
             {
-                if (response.IsSuccessStatusCode)
-                {
-                    var json = await response.Content.ReadAsStringAsync();
-                    countriesResponse.Countries = JsonSerializer.Deserialize<List<Country>>(json);
-                }
+                countries = JsonSerializer.Deserialize<List<Country>>(response);
+            }
+            catch (JsonException)
+            {
+                return null;
             }
 
-            return countriesResponse.Countries;
+            return countries;
         }
     }
 }

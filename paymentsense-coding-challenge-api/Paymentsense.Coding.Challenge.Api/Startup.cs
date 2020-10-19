@@ -33,6 +33,8 @@ namespace Paymentsense.Coding.Challenge.Api
 
             services.AddHttpClient();
             services.AddSingleton<ICountriesService, CountriesService>();
+            services.AddSingleton<INetworkCache, NetworkCache>();
+            services.AddSingleton<IHttpService, HttpService>();
 
         }
 
@@ -49,6 +51,8 @@ namespace Paymentsense.Coding.Challenge.Api
             app.UseCors("PaymentsenseCodingChallengeOriginPolicy");
 
             app.UseRouting();
+
+            app.UseHsts();
 
             app.UseAuthorization();
 
